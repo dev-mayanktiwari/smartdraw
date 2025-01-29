@@ -1,17 +1,25 @@
 {
   "name": "http-backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "Http Backend server",
   "main": "index.js",
   "scripts": {
-    "build": "npx tsc",
-    "dev": "nodemon src/index.ts",
-    "start": "npm run build && node dist/index.js"
+    "dist": "npx tsc",
+    "start": "npm run dist && node dist/index.js",
+    "dev": "nodemon src/index.ts"
   },
+  "author": "mayank",
+  "license": "ISC",
   "dependencies": {
-    "@repo/typescript-config": "workspace:*"
+    "cors": "^2.8.5",
+    "dayjs": "^1.11.13",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "helmet": "^8.0.0"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0"
+  }
 }
