@@ -1,0 +1,28 @@
+{
+  "name": "@repo/shared-utils",
+  "version": "0.0.0",
+  "description": "It holds the shared utility functions",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "npx tsc",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "utils"
+  ],
+  "author": "mayank",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2",
+    "@repo/types": "workspace:*",
+    "@repo/typescript-config": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0"
+  }
+}
