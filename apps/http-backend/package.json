@@ -6,7 +6,8 @@
   "scripts": {
     "dist": "npx tsc",
     "start": "npm run dist && node dist/index.js",
-    "dev": "nodemon src/index.ts"
+    "dev": "nodemon src/index.ts",
+    "remove:pkg": "rm -rf node_modules"
   },
   "author": "mayank",
   "license": "ISC",
@@ -15,7 +16,10 @@
     "dayjs": "^1.11.13",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
-    "helmet": "^8.0.0"
+    "helmet": "^8.0.0",
+    "@repo/shared-utils": "workspace:*",
+    "@repo/types": "workspace:*",
+    "@repo/auth": "workspace:*"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",

@@ -2,10 +2,10 @@ import express, { Application, NextFunction, Request, Response } from "express";
 import cors from "cors";
 import helmet from "helmet";
 import { AppConfig } from "./config";
-import { ResponseMessage } from "./constants/responseMessage";
-import httpError from "./utils/httpError";
 import globalErrorHandler from "./middlewares/globalErrorHandler";
 import healthRouter from "./routes/healthRoutes";
+import { ResponseMessage } from "@repo/types";
+import { httpError } from "@repo/shared-utils";
 
 const app: Application = express();
 const PORT = AppConfig.get("PORT");
