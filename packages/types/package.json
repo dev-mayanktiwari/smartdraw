@@ -1,0 +1,28 @@
+{
+  "name": "@repo/types",
+  "version": "0.0.0",
+  "description": "It holds the types for the repo",
+  "main": "dist/index.js",
+  "types": "src/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "npx tsc",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "express": "^4.21.2",
+    "ws": "^8.18.0"
+  },
+  "keywords": [
+    "types"
+  ],
+  "author": "mayank",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/ws": "^8.5.14"
+  }
+}
