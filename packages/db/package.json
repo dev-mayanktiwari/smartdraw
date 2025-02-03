@@ -1,0 +1,27 @@
+{
+  "name": "@repo/db",
+  "version": "0.0.0",
+  "description": "This is the database package of this repository.",
+  "main": "./dist/index.js",
+  "types": "src/index.d.ts",
+  "scripts": {
+    "build": "npx tsc",
+    "remove:pkg": "rm -rf node_modules",
+    "clean": "rm -rf dist",
+    "db:push": "npx prisma db push --schema=src/prisma/schema.prisma",
+    "db:migrate": "npx prisma migrate dev --schema=src/prisma/schema.prisma",
+    "db:generate": "npx prisma generate --schema=src/prisma/schema.prisma"
+  },
+  "keywords": [
+    "db"
+  ],
+  "author": "mayank",
+  "license": "ISC",
+  "dependencies": {
+    "prisma": "^6.3.0",
+    "@repo/typescript-config": "workspace:*"
+  },
+  "devDependencies": {
+    "@prisma/client": "^6.3.0"
+  }
+}
