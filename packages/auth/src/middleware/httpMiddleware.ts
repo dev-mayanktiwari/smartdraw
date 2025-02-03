@@ -1,34 +1,36 @@
-import "@repo/types";
-import { Request, Response, NextFunction } from "express";
 import { httpError } from "@repo/shared-utils";
-import { verifyToken } from "../jwt";
-import { ResponseMessage, StatusCodes, TokenPayload } from "@repo/types";
+import {
+  AuthenticatedRequest,
+  ResponseMessage,
+  StatusCodes,
+} from "@repo/types";
+import { NextFunction, Request } from "express";
+import { TokenService } from "../jwt";
 
-export const httpAuthMiddleware = () => {
-  return (req: Request, res: Response, next: NextFunction) => {
-    const token =
-      req.cookies?.refreshToken || req.headers?.authorization?.split(" ")[1];
+export const httpMiddleware = (req: Request, next: NextFunction) => {
+  try {
+    const authHeader = req.headers.authorization;
 
-    if (!token) {
+    if (!authHeader?.startsWith("Bearer ")) {
       return httpError(
         next,
-        new Error(ResponseMessage.UNAUTHORIZED),
+        new Error(ResponseMessage.TOKEN_ERROR),
         req,
         StatusCodes.ERROR.CLIENT_ERROR.UNAUTHORIZED
       );
     }
 
-    try {
-      const payload = verifyToken<TokenPayload>(token);
-      req.user = payload;
-      next();
-    } catch (error) {
-      return httpError(
-        next,
-        error,
-        req,
-        StatusCodes.ERROR.CLIENT_ERROR.UNAUTHORIZED
-      );
-    }
-  };
+    const token = authHeader.split(" ")[1];
+    const payload = TokenService.verifyToken(token!);
+    (req as AuthenticatedRequest).user = payload;
+
+    next();
+  } catch (error) {
+    return httpError(
+      next,
+      error,
+      req,
+      StatusCodes.ERROR.SERVER_ERROR.INTERNAL_SERVER_ERROR
+    );
+  }
 };
