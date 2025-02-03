@@ -1,7 +1,12 @@
 import "@repo/types";
-import { verifyToken } from "../jwt";
 import { IncomingMessage } from "http";
-import { TokenPayload } from "@repo/types";
+import {
+  AuthenticatedWebSocket,
+  ResponseMessage,
+  WSStatusCodes,
+} from "@repo/types";
+import { WSError } from "@repo/shared-utils";
+import { TokenService } from "../jwt";
 
 export function wsMidddleware(
   ws: WebSocket,
@@ -9,24 +14,39 @@ export function wsMidddleware(
   next: () => void
 ) {
   try {
-    // Need to be fixed
-    const urlParams = new URL(req.url as any, `http://${req.headers.host}`);
-    const token = urlParams.searchParams.get("refreshToken");
+    const host = req.headers.host || "localhost";
+    const urlString = req.url || "";
+    const urlParams = new URL(urlString, `http://${host}`);
+
+    const token = urlParams.searchParams.get("accessToken");
 
     if (!token) {
-      console.log("No token provided, Websocket server!!");
-      ws.close(4001, "UNAUTHORIZED");
-      return;
+      throw new WSError(
+        WSStatusCodes.UNAUTHORIZED,
+        ResponseMessage.UNAUTHORIZED
+      );
     }
 
-    const payload = verifyToken<TokenPayload>(token);
+    const payload = TokenService.verifyToken(token);
 
     // Need to be fixec
-    (ws as any).user = payload;
+    (ws as AuthenticatedWebSocket).user = payload;
 
     next();
   } catch (error) {
-    console.log("Error in authentication: WS Server", error);
-    ws.close(4003, "Internal server error");
+    const wsError =
+      error instanceof WSError
+        ? error
+        : new WSError(
+            WSStatusCodes.INTERNAL_ERROR,
+            ResponseMessage.INTERNAL_SERVER_ERROR
+          );
+
+    console.error(
+      `Websocket Authentication error: ${wsError.message}`,
+      error instanceof Error ? error.stack : error
+    );
+
+    ws.close(wsError.code, wsError.message);
   }
 }
