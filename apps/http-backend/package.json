@@ -11,7 +11,7 @@
     "clean": "rm -rf dist",
     "dev:logs": "nodemon --verbose src/index.ts"
   },
-  "author": "mayank",
+  "author": "Mayank Tiwari <devmayanktiwari@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "@repo/auth": "workspace:*",
