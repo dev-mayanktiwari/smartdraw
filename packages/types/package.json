@@ -9,12 +9,14 @@
   ],
   "scripts": {
     "build": "npx tsc",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "remove:pkg": "rm -rf node_modules"
   },
   "dependencies": {
     "@repo/typescript-config": "workspace:*",
     "express": "^4.21.2",
-    "ws": "^8.18.0"
+    "ws": "^8.18.0",
+    "zod": "^3.24.1"
   },
   "keywords": [
     "types"
