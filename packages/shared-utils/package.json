@@ -16,7 +16,7 @@
   "keywords": [
     "utils"
   ],
-  "author": "mayank",
+  "author": "Mayank Tiwari <devmayanktiwari@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "express": "^4.21.2",
