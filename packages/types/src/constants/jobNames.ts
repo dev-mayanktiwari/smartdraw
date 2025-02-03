@@ -1,7 +1,5 @@
 export const JobName = {
   SendWelcomeEmail: "send-welcome-email",
-  SendPasswordChange: "send-password-changed",
-  SendWelcomEmail: "send-welcome-email",
   SendVerificationEmail: "send-verification-email",
   SendPasswordResetEmail: "send-password-reset-email",
   SendPasswordChangeConfirmationEmail:
