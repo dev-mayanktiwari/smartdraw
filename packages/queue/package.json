@@ -1,0 +1,26 @@
+{
+  "name": "queue",
+  "version": "1.0.0",
+  "description": "This project holds the queue logic.",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "npx tsc",
+    "clean": "rm -rf dist",
+    "remove:pkg": "rm -rf node_modules"
+  },
+  "keywords": [
+    "queue"
+  ],
+  "author": "Mayank Tiwari <devmayanktiwari@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "bullmq": "^5.40.0",
+    "dotenv": "^16.4.7",
+    "redis": "^4.7.0"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@types/dotenv": "^8.2.3",
+    "@repo/types": "workspace:*"
+  }
+}
