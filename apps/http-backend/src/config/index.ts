@@ -1,13 +1,21 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-type ConfigKeys = "PORT" | "DATABASE_URL" | "SERVER_URL" | "ENV";
+type ConfigKeys =
+  | "PORT"
+  | "ENV"
+  | "GOOGLE_CLIENT_ID"
+  | "GOOGLE_CLIENT_SECRET"
+  | "GOOGLE_CALLBACK_URL"
+  | "SALTROUNDS";
 
 const _config: Record<ConfigKeys, string | undefined> = {
   PORT: process.env.PORT,
-  DATABASE_URL: process.env.DATABASE_URL,
-  SERVER_URL: process.env.SERVER_URL,
   ENV: process.env.ENV,
+  GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+  GOOGLE_CALLBACK_URL: process.env.GOOGLE_CALLBACK_URL,
+  SALTROUNDS: process.env.SALTROUNDS,
 };
 
 export const AppConfig = {
