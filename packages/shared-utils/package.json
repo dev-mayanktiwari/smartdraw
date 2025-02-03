@@ -10,7 +10,8 @@
   ],
   "scripts": {
     "build": "npx tsc",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "remove:pkg": "rm -rf node_modules"
   },
   "keywords": [
     "utils"
