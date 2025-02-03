@@ -1,3 +1,4 @@
+import { v6 } from "uuid";
 import os from "os";
 import { AppConfig } from "../config";
 
@@ -22,5 +23,9 @@ export default {
         )} MB`,
       },
     };
+  },
+  generateVerifyToken: () => {
+    const token = v6();
+    return token;
   },
 };
