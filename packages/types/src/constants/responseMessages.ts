@@ -16,6 +16,10 @@ export const ResponseMessage = {
   VALIDATION_ERROR: "Validation error.",
   SESSION_EXPIRED: "Session expired. Please log in again.",
   TOO_MANY_REQUESTS: "Too many requests. Please try again later.",
+  TOKEN_ERROR: "Invalid token format.",
+  INVALID_INPUT: "Invalid input format.",
+  ENTITY_EXIST: "Entity already exist.",
+  LOGIN_UNSUCCESSFUL: "Email or password is incorrect.",
 } as const;
 
 export type TResponseMessage =

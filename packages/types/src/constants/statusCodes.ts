@@ -26,6 +26,12 @@ export const StatusCodes = {
   },
 } as const;
 
+export const WSStatusCodes = {
+  UNAUTHORIZED: 4001,
+  TOKEN_EXPIRED: 4002,
+  INTERNAL_ERROR: 4003,
+} as const;
+
 export type TSuccessStatusCodes =
   (typeof StatusCodes.SUCCESS)[keyof typeof StatusCodes.SUCCESS];
 export type TClientErrorStatusCodes =
@@ -36,3 +42,4 @@ export type TStatusCodes =
   | TSuccessStatusCodes
   | TClientErrorStatusCodes
   | TServerErrorStatusCodes;
+export type TWSStatusCodes = (typeof WSStatusCodes)[keyof typeof WSStatusCodes];
