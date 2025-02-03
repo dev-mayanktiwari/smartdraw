@@ -10,12 +10,13 @@
     "clean": "rm -rf dist",
     "db:push": "npx prisma db push --schema=src/prisma/schema.prisma",
     "db:migrate": "npx prisma migrate dev --schema=src/prisma/schema.prisma",
-    "db:generate": "npx prisma generate --schema=src/prisma/schema.prisma"
+    "db:generate": "npx prisma generate --schema=src/prisma/schema.prisma",
+    "db:studio": "npx prisma studio --schema=src/prisma/schema.prisma"
   },
   "keywords": [
     "db"
   ],
-  "author": "mayank",
+  "author": "Mayank Tiwari <devmayanktiwari@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "prisma": "^6.3.0",
