@@ -1,5 +1,5 @@
 import { JobName } from "@repo/types";
-import { priorityQueue } from "../queues/generalQueue";
+import { QueueService } from "../queues/QueueService";
 
 export const sendVerificationEmail = async (
   email: string,
@@ -7,10 +7,15 @@ export const sendVerificationEmail = async (
   token: string,
   code: string
 ) => {
-  return priorityQueue.add(JobName.SendVerificationEmail, {
-    email,
-    name,
-    token,
-    code,
-  });
+  try {
+    const priorityQueue = QueueService.getPriorityQueue();
+    await priorityQueue.add(JobName.SendVerificationEmail, {
+      email,
+      name,
+      token,
+      code,
+    });
+  } catch (error) {
+    console.error(error);
+  }
 };
