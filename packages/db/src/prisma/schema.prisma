@@ -28,12 +28,14 @@ model User {
 }
 
 model Auth {
-  id           Int     @id @default(autoincrement())
-  verifyToken  String? @unique
-  resetToken   String? @unique
-  refreshToken String? @unique
-  userId       String  @unique
-  user         User    @relation(fields: [userId], references: [id])
+  id           Int       @id @default(autoincrement())
+  verifyToken  String?   @unique
+  code         Int?
+  resetToken   String?   @unique
+  expiryTime   DateTime?
+  refreshToken String?   @unique
+  userId       String    @unique
+  user         User      @relation(fields: [userId], references: [id])
 
   @@map("auth")
 }
