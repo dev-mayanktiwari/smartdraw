@@ -2,16 +2,25 @@ import { Router } from "express";
 import passport from "passport";
 import authController from "../controllers/authController";
 import { httpMiddleware } from "@repo/auth";
-import healthController from "../controllers/healthController";
 
 const authRouter: Router = Router();
 
 // EMAIL LOGIN ROUTES
 authRouter.post("/register", authController.register);
-authRouter.post("/verify-email", authController.verifyEmail);
+authRouter.put("/verify-email", authController.verifyEmail);
 authRouter.post("/login", authController.login);
+authRouter.put("/logout", httpMiddleware, authController.logout);
+authRouter.put(
+  "/change-password",
+  httpMiddleware,
+  authController.changePassword
+);
+authRouter.put("/forgot-password", authController.forgotPassword);
+authRouter.put("/reset-password", authController.resetPassword);
+authRouter.put("/refresh-token", authController.refreshToken);
+authRouter.get("/self", httpMiddleware, authController.self);
 
-// GOOGLE LOGIN ROUTES  
+// GOOGLE LOGIN ROUTES
 authRouter.get(
   "/google",
   passport.authenticate("google", { scope: ["profile", "email"] })
@@ -21,8 +30,5 @@ authRouter.get(
   passport.authenticate("google", { session: false, failureRedirect: "/" }),
   authController.handleGoogleCallback
 );
-
-// PROTECTED ROUTES
-authRouter.post("/protectedRoute", httpMiddleware, healthController.self);
 
 export default authRouter;
