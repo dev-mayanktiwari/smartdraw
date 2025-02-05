@@ -6,7 +6,7 @@ import { AppConfig } from "./config";
 import globalErrorHandler from "./middlewares/globalErrorHandler";
 import healthRouter from "./routes/healthRoutes";
 import { ResponseMessage } from "@repo/types";
-import { httpError } from "@repo/shared-utils";
+import { httpError, logger } from "@repo/shared-utils";
 import PassportGoogleStrategy from "./utils/passportGoogleStrategy";
 import authRouter from "./routes/authRoutes";
 import cookieParser from "cookie-parser";
@@ -20,7 +20,7 @@ passport.use(PassportGoogleStrategy);
 // Middlewares
 app.use(cors());
 app.use(helmet());
-app.use(cookieParser());  
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(passport.initialize());
@@ -42,5 +42,10 @@ app.use((req: Request, _: Response, next: NextFunction) => {
 app.use(globalErrorHandler);
 
 app.listen(PORT, () => {
-  console.log(`The server is running on PORT ${PORT}`);
+  logger.info("Server started successfully.", {
+    meta: {
+      PORT: PORT,
+      SERVER_UTL: `http://localhost:${PORT}`,
+    },
+  });
 });
