@@ -2,8 +2,7 @@ import * as React from "react";
 import { Button, Heading, Text } from "@react-email/components";
 import { Layout } from "../components/Layout";
 import { h1, text, button, list } from "../styles/shared";
-import dotenv from "dotenv";
-dotenv.config();
+import { URLS } from "./variables";
 
 interface AccountConfirmationProps {
   name: string;
@@ -32,8 +31,13 @@ export const AccountConfirmation: React.FC<AccountConfirmationProps> = ({
         style={{
           ...button,
           padding: "12px 20px",
+          maxWidth: "80%",
+          width: "100%",
+          margin: "0 auto",
+          textAlign: "center",
+          display: "block",
         }}
-        href={String(process.env.APP_URL)}
+        href={URLS.APP_URL!}
       >
         Start Creating
       </Button>
