@@ -2,8 +2,7 @@ import * as React from "react";
 import { Button, Heading, Text } from "@react-email/components";
 import { Layout } from "../components/Layout";
 import { h1, text, button } from "../styles/shared";
-import dotenv from "dotenv";
-dotenv.config();
+import { URLS } from "./variables";
 
 interface PasswordChangedProps {
   name: string;
@@ -31,7 +30,7 @@ export const PasswordChanged: React.FC<PasswordChangedProps> = ({ name }) => {
           ...button,
           padding: "12px 20px",
         }}
-        href={`${String(process.env.APP_URL)}/account/security`}
+        href={`${String(URLS.APP_URL)}/account/security`}
       >
         Secure My Account
       </Button>
