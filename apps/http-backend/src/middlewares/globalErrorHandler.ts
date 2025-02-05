@@ -7,6 +7,6 @@ export default (
   res: Response,
   __: NextFunction
 ) => {
-  console.log("Error in global error handler", err);
+  // console.log("Error in global error handler", err);
   res.status(err.statusCode || 500).json(err);
 };
