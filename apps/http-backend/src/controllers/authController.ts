@@ -1,5 +1,10 @@
 import { prisma } from "@repo/db";
-import { asyncErrorHandler, httpError, httpResponse } from "@repo/shared-utils";
+import {
+  asyncErrorHandler,
+  httpError,
+  httpResponse,
+  logger,
+} from "@repo/shared-utils";
 import {
   ApplicationEnvirontment,
   AuthenticatedRequest,
@@ -564,7 +569,12 @@ export default {
       // console.log(isWelcomeEmailNeeded);
 
       if (isWelcomeEmailNeeded) {
-        console.log("Sending welcome email");
+        logger.info("Sending welcome mail...", {
+          meta: {
+            email: user.email,
+            name: user.name,
+          },
+        });
         await sendWelcomeEmail(user?.email, user?.name);
       }
 
