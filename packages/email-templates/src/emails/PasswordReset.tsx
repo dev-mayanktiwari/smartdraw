@@ -2,8 +2,7 @@ import * as React from "react";
 import { Button, Heading, Text } from "@react-email/components";
 import { Layout } from "../components/Layout";
 import { h1, text, button, link } from "../styles/shared";
-import dotenv from "dotenv";
-dotenv.config();
+import { URLS } from "./variables";
 
 interface PasswordResetProps {
   name: string;
@@ -14,7 +13,7 @@ export const PasswordReset: React.FC<PasswordResetProps> = ({
   name,
   token,
 }) => {
-  const resetLink = `${String(process.env.FRONTEND_URL)}/reset-password?token=${token}`;
+  const resetLink = `${String(URLS.FRONTEND_URL)}/reset-password?token=${token}`;
 
   return (
     <Layout previewText={`Reset Your Smartdraw Password, ${name}`}>
