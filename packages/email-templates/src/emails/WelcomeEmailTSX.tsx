@@ -2,8 +2,7 @@ import * as React from "react";
 import { Button, Heading, Text } from "@react-email/components";
 import { Layout } from "../components/Layout";
 import { h1, text, button, list } from "../styles/shared";
-import dotenv from "dotenv";
-dotenv.config();
+import { URLS } from "./variables";
 
 interface WelcomeEmailProps {
   name: string;
@@ -29,7 +28,7 @@ export const WelcomeEmail: React.FC<WelcomeEmailProps> = ({ name }) => {
           ...button,
           padding: "12px 20px",
         }}
-        href={String(process.env.APP_URL)}
+        href={String(URLS.APP_URL)}
       >
         Start Creating Now
       </Button>
