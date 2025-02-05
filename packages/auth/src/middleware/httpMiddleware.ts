@@ -4,10 +4,14 @@ import {
   ResponseMessage,
   StatusCodes,
 } from "@repo/types";
-import { NextFunction, Request } from "express";
+import { NextFunction, Request, Response } from "express";
 import { TokenService } from "../jwt";
 
-export const httpMiddleware = (req: Request, next: NextFunction) => {
+export const httpMiddleware = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const authHeader = req.headers.authorization;
 
