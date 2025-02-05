@@ -1,5 +1,4 @@
 import dotenv from "dotenv";
-dotenv.config();
 
 /** @type {import("bullmq").RedisOptions} */
 export const getRedisConfig = () => ({
@@ -8,5 +7,5 @@ export const getRedisConfig = () => ({
   port: Number(process.env.REDIS_PORT),
 });
 
-console.log("Redis Config");
+// console.log("Redis Config");
 
