@@ -1,6 +1,7 @@
 import { v6 } from "uuid";
 import os from "os";
 import { AppConfig } from "../config";
+import dayjs from "dayjs";
 
 export default {
   getSystemHealth: () => {
@@ -27,5 +28,16 @@ export default {
   generateVerifyToken: () => {
     const token = v6();
     return token;
+  },
+  generateCode: (n: number) => {
+    if (n <= 0) {
+      return null;
+    }
+    const min = Math.pow(10, n - 1);
+    const max = Math.pow(10, n) - 1;
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  },
+  generateExpiryTime: (minutes: number) => {
+    return dayjs().add(minutes, "minutes").toISOString();
   },
 };

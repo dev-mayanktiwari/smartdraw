@@ -33,6 +33,7 @@ const PassportGoogleStrategy = new GoogleStrategy(
           authProvider: "GOOGLE",
           providerId: profile.id,
           isVerified: true,
+          lastLoginAt: new Date(),
         },
       });
 
