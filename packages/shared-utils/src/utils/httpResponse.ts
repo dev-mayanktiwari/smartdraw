@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { THTTPResponse } from "@repo/types";
 import { ApplicationEnvirontment } from "@repo/types";
 import { TApplicationEnvirontment } from "@repo/types";
+import { logger } from "./logger";
 
 const httpResponse = (
   req: Request,
@@ -22,6 +23,10 @@ const httpResponse = (
     message: responseMessage,
     data: data,
   };
+
+  logger.info(`Controller Response`, {
+    meta: response,
+  });
 
   //Production env check
   if (env === ApplicationEnvirontment.PRODUCTION) {
