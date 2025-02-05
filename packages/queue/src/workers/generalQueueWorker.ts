@@ -1,21 +1,25 @@
 import { JobName, QueueNames } from "@repo/types";
 import { Worker } from "bullmq";
-import redisConfig from "../config/redisConfig";
 
+import { sendWelcomeEmailNodemailer } from "@repo/email";
+import { getRedisConfig } from "../config/redisConfig";
+import { sendPasswordChangeConfirmationEmail } from "../utility";
+
+// console.log(JSON.stringify(QueueNames));
 export const generalQueueWorker = new Worker(
-  QueueNames.GeneralQueue,
+  String(QueueNames.GeneralQueue),
   async (job) => {
     const { name } = job;
     console.log("General Queue Worker Processing job", job.data);
     try {
       if (name === JobName.SendWelcomeEmail) {
         const { email, name } = job.data;
-
-        // TODO: SEND WELCOME EMAIL
+        
+        await sendWelcomeEmailNodemailer(email, name);
       } else if (name === JobName.SendPasswordChangeConfirmationEmail) {
         const { email, name } = job.data;
 
-        // TODO: SEND PASSWORD CHANGE CONFIRMATION EMAIL
+        await sendPasswordChangeConfirmationEmail(email, name);
       }
     } catch (error) {
       //   console.error("Error in general Queue Worker");
@@ -26,7 +30,7 @@ export const generalQueueWorker = new Worker(
     }
   },
   {
-    connection: redisConfig,
+    connection: getRedisConfig(),
   }
 );
 
