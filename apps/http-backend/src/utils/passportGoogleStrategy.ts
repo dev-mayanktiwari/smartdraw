@@ -1,6 +1,7 @@
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { AppConfig } from "../config";
 import { prisma } from "@repo/db";
+import { logger } from "@repo/shared-utils";
 
 const PassportGoogleStrategy = new GoogleStrategy(
   {
@@ -39,7 +40,11 @@ const PassportGoogleStrategy = new GoogleStrategy(
 
       return done(null, user);
     } catch (error) {
-      console.log("Error in passport:", error);
+      logger.error("Error in passport google strategy", {
+        meta: {
+          error,
+        },
+      });
       return done(error);
     }
   }
