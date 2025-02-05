@@ -5,6 +5,6 @@ export const JobName = {
   SendPasswordChangeConfirmationEmail:
     "send-password-change-confirmation-email",
   SendInvitationEmail: "send-invitation-email",
-};
+} as const;
 
 export type TJobName = (typeof JobName)[keyof typeof JobName];
