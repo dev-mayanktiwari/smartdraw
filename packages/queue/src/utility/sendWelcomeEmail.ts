@@ -1,9 +1,14 @@
 import { JobName } from "@repo/types";
-import { generalQueue } from "../queues/priorityQueue";
+import { QueueService } from "../queues/QueueService";
 
-export const sendWelcomeEmail = (email: string, name: string) => {
-  return generalQueue.add(JobName.SendWelcomeEmail, {
-    email,
-    name,
-  });
+export const sendWelcomeEmail = async (email: string, name: string) => {
+  try {
+    const generalQueue = QueueService.getGeneralQueue();
+    await generalQueue.add(JobName.SendWelcomeEmail, {
+      email,
+      name,
+    });
+  } catch (error) {
+    console.error(error);
+  }
 };
