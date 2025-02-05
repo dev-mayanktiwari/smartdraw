@@ -2,8 +2,7 @@ import * as React from "react";
 import { Button, Heading, Text } from "@react-email/components";
 import { Layout } from "../components/Layout";
 import { h1, text, button, link } from "../styles/shared";
-import dotenv from "dotenv";
-dotenv.config();
+import { URLS } from "./variables";
 
 interface EmailVerificationProps {
   name: string;
@@ -16,8 +15,15 @@ export const EmailVerification: React.FC<EmailVerificationProps> = ({
   token,
   code,
 }) => {
-  const verificationLink = `${String(process.env.FRONTEND_URL)}/verify?token=${token}&code=${code}`;
-
+  
+  
+  // WTH is this??
+  // Why this is not working?
+  // This is motherfucking URLS.APP_URL
+  // const appUrl = URLS.APP_URL;
+  
+  const appUrl = URLS.APP_URL;
+  const verificationLink = `${appUrl}/verify-email?token=${token}&code=${code}`;
   return (
     <Layout previewText={`Verify Your Smartdraw Account, ${name}`}>
       <Heading style={h1}>Verify Your Email</Heading>
