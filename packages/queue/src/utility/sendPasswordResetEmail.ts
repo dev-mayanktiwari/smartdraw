@@ -1,14 +1,19 @@
 import { JobName } from "@repo/types";
-import { priorityQueue } from "../queues/generalQueue";
+import { QueueService } from "../queues/QueueService";
 
-export const sendPasswordResetEmail = (
+export const sendPasswordResetEmail = async (
   email: string,
   name: string,
   token: string
 ) => {
-  return priorityQueue.add(JobName.SendPasswordResetEmail, {
-    email,
-    name,
-    token,
-  });
+  try {
+    const priorityQueue = QueueService.getPriorityQueue();
+    await priorityQueue.add(JobName.SendPasswordResetEmail, {
+      email,
+      name,
+      token,
+    });
+  } catch (error) {
+    console.error(error);
+  }
 };
