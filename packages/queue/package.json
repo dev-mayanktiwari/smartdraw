@@ -1,12 +1,15 @@
 {
-  "name": "queue",
+  "name": "@repo/queue",
   "version": "1.0.0",
   "description": "This project holds the queue logic.",
   "main": "dist/index.js",
   "scripts": {
     "build": "npx tsc",
     "clean": "rm -rf dist",
-    "remove:pkg": "rm -rf node_modules"
+    "remove:pkg": "rm -rf node_modules",
+    "start": "pnpm run build && node dist/workers.js",
+    "rebuild": "pnpm run clean && pnpm run remove:pkg && pnpm install && pnpm run build",
+    "dev": "nodemon src/workers.ts"
   },
   "keywords": [
     "queue"
@@ -16,11 +19,12 @@
   "dependencies": {
     "bullmq": "^5.40.0",
     "dotenv": "^16.4.7",
-    "redis": "^4.7.0"
+    "redis": "^4.7.0",
+    "@repo/types": "workspace:*",
+    "@repo/email": "workspace:*"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
-    "@types/dotenv": "^8.2.3",
-    "@repo/types": "workspace:*"
+    "@types/dotenv": "^8.2.3"
   }
 }
