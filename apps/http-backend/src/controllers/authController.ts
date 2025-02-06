@@ -36,6 +36,7 @@ import {
   upsertRefreshToken,
 } from "../services/userDbServices";
 import {
+  sendPasswordChangeConfirmationEmail,
   sendPasswordResetEmail,
   sendVerificationEmail,
   sendWelcomeEmail,
@@ -380,6 +381,8 @@ export default {
 
       await updatePassword(user.id!, hashedPassword);
       await clearResetTokenAndExpiry(user.id!);
+
+      await sendPasswordChangeConfirmationEmail(user.email!, user.name!);
 
       return httpResponse(
         req,
