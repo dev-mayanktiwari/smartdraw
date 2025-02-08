@@ -1,21 +1,22 @@
 import "@repo/types";
+import { WebSocket as WSWebSocket } from "ws";
 import { IncomingMessage } from "http";
-import {
-  AuthenticatedWebSocket,
-  ResponseMessage,
-  WSStatusCodes,
-} from "@repo/types";
+import { ResponseMessage, WSStatusCodes } from "@repo/types";
 import { WSError } from "@repo/shared-utils";
 import { TokenService } from "../jwt";
 
-export function wsMidddleware(
-  ws: WebSocket,
-  req: IncomingMessage,
-  next: () => void
-) {
+interface ExtendedWebSocket extends WSWebSocket {
+  user?: any;
+}
+
+export const wsMidddleware = (
+  ws: ExtendedWebSocket,
+  request: IncomingMessage,
+  next: (err?: WSError | null) => void
+) => {
   try {
-    const host = req.headers.host || "localhost";
-    const urlString = req.url || "";
+    const host = request.headers.host || "localhost";
+    const urlString = request.url || "";
     const urlParams = new URL(urlString, `http://${host}`);
 
     const token = urlParams.searchParams.get("accessToken");
@@ -29,10 +30,9 @@ export function wsMidddleware(
 
     const payload = TokenService.verifyToken(token);
 
-    // Need to be fixec
-    (ws as AuthenticatedWebSocket).user = payload;
+    ws.user = payload;
 
-    next();
+    next(null);
   } catch (error) {
     const wsError =
       error instanceof WSError
@@ -47,6 +47,6 @@ export function wsMidddleware(
       error instanceof Error ? error.stack : error
     );
 
-    ws.close(wsError.code, wsError.message);
+    return next(wsError);
   }
-}
+};
