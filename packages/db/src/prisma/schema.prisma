@@ -21,7 +21,10 @@ model User {
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
 
-  Auth Auth?
+  Auth       Auth?
+  ownedRoom  Room[]       @relation("Owner")
+  membership RoomMember[]
+  chats      Chat[]       @relation("ChatUser")
 
   @@index([email, id])
   @@map("user")
@@ -35,9 +38,50 @@ model Auth {
   expiryTime   DateTime?
   refreshToken String?   @unique
   userId       String    @unique
-  user         User      @relation(fields: [userId], references: [id])
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("auth")
+}
+
+model Room {
+  id          String       @id @default(cuid())
+  name        String       @unique
+  createdAt   DateTime     @default(now())
+  description String?
+  owner       User         @relation("Owner", fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId     String
+  members     RoomMember[]
+  chats       Chat[]       @relation("ChatRoom")
+
+  @@map("room")
+}
+
+model RoomMember {
+  id     Int    @id @default(autoincrement())
+  roomId String
+  room   Room   @relation(fields: [roomId], references: [id])
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+  role   Role   @default(MEMBER)
+
+  @@unique([roomId, userId])
+  @@map("room_member")
+}
+
+model Chat {
+  id      Int    @id @default(autoincrement())
+  message String
+  userId  String
+  roomId  String
+  user    User   @relation("ChatUser", fields: [userId], references: [id])
+  room    Room   @relation("ChatRoom", fields: [roomId], references: [id])
+
+  @@map("chat")
+}
+
+enum Role {
+  MEMBER
+  ADMIN
 }
 
 enum AuthProvider {

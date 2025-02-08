@@ -131,6 +131,12 @@ importers:
         specifier: ^8.18.0
         version: 8.18.0
     devDependencies:
+      '@repo/auth':
+        specifier: workspace:*
+        version: link:../../packages/auth
+      '@repo/shared-utils':
+        specifier: workspace:*
+        version: link:../../packages/shared-utils
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
