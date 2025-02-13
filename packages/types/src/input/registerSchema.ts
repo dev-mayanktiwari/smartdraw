@@ -12,6 +12,7 @@ export const UserRegisterInput = z.object({
     .min(8, "Password must be 8 characters long")
     .max(30, "Password must be 30 characters long")
     .trim(),
+  username: z.string().min(5, "Username must be atleast 5 characters long"),
 });
 
 export type TUserRegistrationInput = z.infer<typeof UserRegisterInput>;

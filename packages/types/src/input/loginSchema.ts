@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const UserLoginInput = z.object({
-  email: z.string().email(),
+  identifier: z.string(),
   password: z.string(),
 });
 
