@@ -19,6 +19,7 @@ authRouter.put("/forgot-password", authController.forgotPassword);
 authRouter.put("/reset-password", authController.resetPassword);
 authRouter.put("/refresh-token", authController.refreshToken);
 authRouter.get("/self", httpMiddleware, authController.self);
+authRouter.get("/auth-status", httpMiddleware, authController.authStatus);
 
 // GOOGLE LOGIN ROUTES
 authRouter.get(
