@@ -1,7 +1,7 @@
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { AppConfig } from "../config";
-import { prisma } from "@repo/db";
 import { logger } from "@repo/shared-utils";
+import { createNewGoogleUser } from "../services/userDbServices";
 
 const PassportGoogleStrategy = new GoogleStrategy(
   {
@@ -19,24 +19,38 @@ const PassportGoogleStrategy = new GoogleStrategy(
       }
 
       // console.log(profile);
+      const username = email.split("@")[0];
 
-      const user = await prisma.user.upsert({
-        where: {
-          email,
-        },
-        update: {
-          lastLoginAt: new Date(),
-        },
-        create: {
-          email,
-          name: profile.displayName,
-          avatar: profile.photos?.[0]?.value,
-          authProvider: "GOOGLE",
-          providerId: profile.id,
-          isVerified: true,
-          lastLoginAt: new Date(),
-        },
-      });
+      if (!username) {
+        return done(new Error("No username found from email"));
+      }
+
+      const user = await createNewGoogleUser(
+        email,
+        profile.displayName,
+        username,
+        profile.photos?.[0]?.value || "",
+        profile.id
+      );
+
+      // await prisma.user.upsert({
+      //   where: {
+      //     email,
+      //   },
+      //   update: {
+      //     lastLoginAt: new Date(),
+      //   },
+      //   create: {
+      //     email,
+      //     name: profile.displayName,
+      //     avatar: profile.photos?.[0]?.value,
+      //     authProvider: "GOOGLE",
+      //     providerId: profile.id,
+      //     isVerified: true,
+      //     lastLoginAt: new Date(),
+      //     username,
+      //   },
+      // });
 
       return done(null, user);
     } catch (error) {
