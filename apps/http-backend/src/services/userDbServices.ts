@@ -1,4 +1,5 @@
 import { prisma, type User, type Auth } from "@repo/db";
+import { UserWithoutSensitiveInfo } from "@repo/types";
 
 export const findUserByEmail = async (email: string): Promise<User | null> => {
   return prisma.user.findUnique({
@@ -52,6 +53,7 @@ export const findUserByIdWithouthPassword = async (
       email: true,
       name: true,
       avatar: true,
+      username: true,
       authProvider: true,
       isVerified: true,
       lastLoginAt: true,
@@ -134,6 +136,85 @@ export const upsertRefreshToken = async (
     create: {
       userId,
       refreshToken,
+    },
+  });
+};
+
+export const findUserByEmailorUsername = async (
+  identifier: string
+): Promise<Pick<
+  User,
+  "id" | "email" | "name" | "username" | "isVerified" | "password"
+> | null> => {
+  return prisma.user.findFirst({
+    where: {
+      OR: [{ email: identifier }, { username: identifier }],
+    },
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      username: true,
+      isVerified: true,
+      password: true,
+    },
+  });
+};
+
+export const createNewUser = async (
+  email: string,
+  name: string,
+  password: string,
+  username: string,
+  verificationToken: string,
+  code: number
+): Promise<UserWithoutSensitiveInfo> => {
+  return prisma.user.create({
+    data: {
+      email,
+      name,
+      password,
+      username,
+      authProvider: "EMAIL",
+      Auth: {
+        create: {
+          verifyToken: verificationToken,
+          code,
+        },
+      },
+    },
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      username: true,
+    },
+  });
+};
+
+export const createNewGoogleUser = async (
+  email: string,
+  name: string,
+  username: string,
+  avatar: string,
+  providerId: string
+): Promise<UserWithoutSensitiveInfo> => {
+  return prisma.user.upsert({
+    where: {
+      email,
+    },
+    update: {
+      lastLoginAt: new Date(),
+    },
+    create: {
+      email,
+      name,
+      avatar,
+      authProvider: "GOOGLE",
+      providerId,
+      isVerified: true,
+      lastLoginAt: new Date(),
+      username,
     },
   });
 };
