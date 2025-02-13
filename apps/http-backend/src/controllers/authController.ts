@@ -15,6 +15,7 @@ import {
   StatusCodes,
   UserLoginInput,
   UserRegisterInput,
+  UserWithoutSensitiveInfo,
 } from "@repo/types";
 import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt";
@@ -24,7 +25,9 @@ import { TokenService } from "@repo/auth";
 import {
   addResetTokenAndExpiry,
   clearResetTokenAndExpiry,
+  createNewUser,
   findUserByEmail,
+  findUserByEmailorUsername,
   findUserByIdWithouthPassword,
   findUserByResetToken,
   findUserByUserID,
@@ -59,7 +62,7 @@ export default {
         );
       }
 
-      const { email, name, password } = safeParse.data;
+      const { email, name, password, username } = safeParse.data;
 
       const existingUser = await prisma.user.findUnique({
         where: {
@@ -85,20 +88,14 @@ export default {
       const verificationToken = quicker.generateVerifyToken();
       const code = quicker.generateCode(6);
 
-      const newUser = await prisma.user.create({
-        data: {
-          name,
-          email,
-          password: hashedPassword,
-          authProvider: "EMAIL",
-          Auth: {
-            create: {
-              verifyToken: verificationToken,
-              code: code,
-            },
-          },
-        },
-      });
+      const newUser = await createNewUser(
+        email,
+        name,
+        hashedPassword,
+        username,
+        verificationToken,
+        code!
+      );
 
       await sendVerificationEmail(email, name, verificationToken, String(code));
 
@@ -194,14 +191,9 @@ export default {
         );
       }
 
-      const { email, password } = safeParse.data;
+      const { identifier, password } = safeParse.data;
 
-      const existingUser = await prisma.user.findUnique({
-        where: {
-          email: email,
-          isActive: true,
-        },
-      });
+      const existingUser = await findUserByEmailorUsername(identifier);
 
       if (!existingUser) {
         return httpError(
@@ -256,6 +248,13 @@ export default {
         maxAge: 30 * 24 * 60 * 60 * 1000,
       });
 
+      const responseUser: UserWithoutSensitiveInfo = {
+        name: existingUser.name,
+        id: existingUser.id,
+        email: existingUser.email,
+        username: existingUser.username,
+      };
+
       return httpResponse(
         req,
         res,
@@ -263,6 +262,7 @@ export default {
         ResponseMessage.LOGIN_SUCCESS,
         {
           accesstoken: `Bearer ${accessToken}`,
+          user: responseUser,
         }
       );
     }
@@ -531,6 +531,13 @@ export default {
       name: user.name,
     });
 
+    const responseUser: UserWithoutSensitiveInfo = {
+      name: user.name,
+      id: user.id,
+      email: user.email,
+      username: user.username,
+    };
+
     return httpResponse(
       req,
       res,
@@ -538,6 +545,7 @@ export default {
       "Token refreshed successfully",
       {
         accessToken: `Bearer ${accessToken}`,
+        user: responseUser,
       }
     );
   }),
@@ -597,8 +605,15 @@ export default {
         ResponseMessage.LOGIN_SUCCESS,
         {
           accesstoken: `Bearer ${accessToken}`,
+          user,
         }
       );
     }
   ),
+
+  authStatus: asyncErrorHandler(async (req: Request, res: Response) => {
+    return httpResponse(req, res, StatusCodes.SUCCESS.OK, "Authenticated", {
+      isAuthenticated: true,
+    });
+  }),
 };
