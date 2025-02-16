@@ -8,7 +8,8 @@ type ConfigKeys =
   | "GOOGLE_CLIENT_SECRET"
   | "GOOGLE_CALLBACK_URL"
   | "SALTROUNDS"
-  | "COOKIE_DOMAIN";
+  | "COOKIE_DOMAIN"
+  | "CORS_ORIGIN";
 
 const _config: Record<ConfigKeys, string | undefined> = {
   PORT: process.env.PORT,
@@ -18,6 +19,7 @@ const _config: Record<ConfigKeys, string | undefined> = {
   GOOGLE_CALLBACK_URL: process.env.GOOGLE_CALLBACK_URL,
   SALTROUNDS: process.env.SALTROUNDS,
   COOKIE_DOMAIN: process.env.COOKIE_DOMAIN,
+  CORS_ORIGIN: process.env.CORS_ORIGIN,
 };
 
 export const AppConfig = {

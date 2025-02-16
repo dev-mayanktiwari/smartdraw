@@ -18,7 +18,11 @@ const PORT = AppConfig.get("PORT");
 passport.use(PassportGoogleStrategy);
 
 // Middlewares
-app.use(cors());
+app.use(cors({
+  origin: AppConfig.get("CORS_ORIGIN") as string,
+  credentials: true,
+}));
+
 app.use(helmet());
 app.use(cookieParser());
 app.use(express.json());
