@@ -64,17 +64,24 @@ export default {
 
       const { email, name, password, username } = safeParse.data;
 
-      const existingUser = await prisma.user.findUnique({
-        where: {
-          email: email,
-        },
-      });
+      const existingUser = await findUserByEmail(email);
 
       //   console.log(existingUser);
       if (existingUser) {
         return httpError(
           next,
           new Error(ResponseMessage.ENTITY_EXIST),
+          req,
+          StatusCodes.ERROR.CLIENT_ERROR.BAD_REQUEST
+        );
+      }
+
+      const isUsernameTaken = await findUserByEmailorUsername(username);
+
+      if (isUsernameTaken) {
+        return httpError(
+          next,
+          new Error("Username already taken"),
           req,
           StatusCodes.ERROR.CLIENT_ERROR.BAD_REQUEST
         );
@@ -562,7 +569,7 @@ export default {
   handleGoogleCallback: asyncErrorHandler(
     async (req: Request, res: Response, next: NextFunction) => {
       const user = req.user as any;
-
+      const source = req.query.source as string || "login";
       // console.log(user);
 
       const { accessToken, refreshToken } = TokenService.generateTokens({
@@ -598,16 +605,23 @@ export default {
         maxAge: 30 * 24 * 60 * 60 * 1000,
       });
 
-      return httpResponse(
-        req,
-        res,
-        StatusCodes.SUCCESS.CREATED,
-        ResponseMessage.LOGIN_SUCCESS,
-        {
-          accesstoken: `Bearer ${accessToken}`,
-          user,
-        }
+      const frontendURL = AppConfig.get("FRONTEND_URL") as string;
+      return res.redirect(
+        `${frontendURL}/auth-success?` +
+          `accessToken=Bearer ${accessToken}&` +
+          `userData=${encodeURIComponent(JSON.stringify(user))}&` +
+          `source=${source}`
       );
+      // return httpResponse(
+      //   req,
+      //   res,
+      //   StatusCodes.SUCCESS.CREATED,
+      //   ResponseMessage.LOGIN_SUCCESS,
+      //   {
+      //     accesstoken: `Bearer ${accessToken}`,
+      //     user,
+      //   }
+      // );
     }
   ),
 
