@@ -44,5 +44,5 @@ export const useAuth = () => {
     }
   };
 
-  return { isAuthenticated, login, logout, user, refreshToken, accessToken };
+  return { isAuthenticated, login, logout, user, refreshToken, accessToken, setTokens, setUser };
 };
