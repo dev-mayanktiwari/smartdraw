@@ -27,6 +27,18 @@ export const loginAPI = async (data: TUserLoginInput) => {
 };
 
 export const logoutAPI = async () => {
-  const response = await api.post(ENDPOINTS.LOGOUT);
+  const response = await api.put(ENDPOINTS.LOGOUT);
+  return response.data;
+};
+
+export const googleLoginAPI = async () => {
+  const response = await api.get(ENDPOINTS.GOOGLE_LOGIN);
+  return response.data;
+};
+
+export const verifyEmailAPI = async (code: string, token: string) => {
+  const response = await api.put(
+    ENDPOINTS.VERIFY_EMAIL + `?token=${token}&code=${code}`
+  );
   return response.data;
 };
