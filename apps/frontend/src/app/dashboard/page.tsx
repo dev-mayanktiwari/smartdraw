@@ -3,12 +3,22 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { PenTool, Users, Settings } from "lucide-react";
-
+import { useRouter } from "next/navigation";
 import ProtectedRoute from "@/provider/protectedRouter";
+import { useAuth } from "@/hooks/useAuth";
 
 const Dashboard = () => {
+  const router = useRouter();
+  const { logout } = useAuth();
+
+  const handleLogout = async () => {
+    console.log("Logging out...");
+    await logout();
+    router.push("/login");
+  };
+
   return (
-    <ProtectedRoute>
+    <ProtectedRoute requireAuth={true}>
       <div className="min-h-screen bg-gray-900">
         <div className="container mx-auto px-4 py-8">
           <h1 className="text-3xl font-bold text-white mb-8">
@@ -51,11 +61,12 @@ const Dashboard = () => {
                 <Settings className="h-6 w-6 text-blue-500 mr-2" />
                 <h2 className="text-xl font-semibold text-white">Settings</h2>
               </div>
-              <p className="text-gray-400 mb-4">
-                Configure your drawing preferences
-              </p>
-              <Button className="w-full bg-blue-500 hover:bg-blue-600">
-                Open Settings
+              <p className="text-gray-400 mb-4">Logout your account</p>
+              <Button
+                className="w-full bg-blue-500 hover:bg-blue-600"
+                onClick={handleLogout}
+              >
+                Logout
               </Button>
             </div>
           </div>
