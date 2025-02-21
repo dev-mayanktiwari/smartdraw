@@ -9,7 +9,8 @@ type ConfigKeys =
   | "GOOGLE_CALLBACK_URL"
   | "SALTROUNDS"
   | "COOKIE_DOMAIN"
-  | "CORS_ORIGIN";
+  | "CORS_ORIGIN"
+  | "FRONTEND_URL";
 
 const _config: Record<ConfigKeys, string | undefined> = {
   PORT: process.env.PORT,
@@ -20,6 +21,7 @@ const _config: Record<ConfigKeys, string | undefined> = {
   SALTROUNDS: process.env.SALTROUNDS,
   COOKIE_DOMAIN: process.env.COOKIE_DOMAIN,
   CORS_ORIGIN: process.env.CORS_ORIGIN,
+  FRONTEND_URL: process.env.FRONTEND_URL,
 };
 
 export const AppConfig = {
