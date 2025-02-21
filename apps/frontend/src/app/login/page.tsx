@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -19,6 +19,10 @@ import {
 } from "@/components/ui/form";
 import Image from "next/image";
 import Link from "next/link";
+import { toast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
+import { ENDPOINTS } from "@/lib/endpoints";
+import getErrorMessage from "@/utils/getErrorMessage";
 
 const Login = () => {
   const router = useRouter();
@@ -30,18 +34,51 @@ const Login = () => {
     },
   });
 
+  // GOOGLE LOGIN ERROR HANDLING
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const error = params.get("error");
+    if (error) {
+      toast({
+        title: "Error",
+        description: getErrorMessage(error, "signup"),
+        variant: "destructive",
+        duration: 5000,
+      });
+    }
+  }, []);
+
   const onSubmit = async (data: TUserLoginInput) => {
     try {
-      // TODO: Implement API call
-      console.log(data);
+      const { login } = useAuth();
+      await login(data);
+      form.reset();
+      toast({
+        title: "Login successful",
+        description: "You have successfully logged in to your account.",
+        variant: "default",
+        duration: 5000,
+      });
       router.push("/dashboard");
-    } catch (error) {
-      console.error("Login failed:", error);
+    } catch (error: any) {
+      form.reset();
+      const errorMessage =
+        error.response.data.message || "Something went wrong.";
+      form.setError("root", {
+        message: errorMessage,
+      });
+      toast({
+        title: "Signup failed",
+        description: errorMessage,
+        variant: "destructive",
+        duration: 5000,
+      });
     }
   };
 
   const handleGoogleLogin = () => {
-    window.location.href = "/api/auth/google";
+    window.location.href = window.location.href =
+      ENDPOINTS.GOOGLE_LOGIN + "?source=login";
   };
 
   return (
