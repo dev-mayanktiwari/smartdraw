@@ -1,6 +1,6 @@
 export const ENDPOINTS = {
   REGISTER: "auth/register",
-  GOOGLE_LOGIN: "auth/google",
+  GOOGLE_LOGIN: `${process.env.NEXT_PUBLIC_API_URL}auth/google`,
   LOGIN: "auth/login",
   LOGOUT: "auth/logout",
   VERIFY_EMAIL: "auth/verify-email",
@@ -9,5 +9,5 @@ export const ENDPOINTS = {
   RESET_PASSWORD: "auth/reset-password",
   REFRESH_TOKEN: "auth/refresh-token",
   SELF: "auth/self",
-  AUTH_CHECK: "auth/status"
+  AUTH_CHECK: "auth/status",
 } as const;
