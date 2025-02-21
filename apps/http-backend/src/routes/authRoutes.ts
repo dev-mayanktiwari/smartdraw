@@ -28,7 +28,10 @@ authRouter.get(
 );
 authRouter.get(
   "/google/callback",
-  passport.authenticate("google", { session: false, failureRedirect: "/" }),
+  passport.authenticate("google", {
+    session: false,
+    failureRedirect: `http://localhost:3000/error?message${encodeURIComponent("Google login failed")}`,
+  }),
   authController.handleGoogleCallback
 );
 
