@@ -1,6 +1,4 @@
-"use client";
-
-import type React from "react";
+import React, { useRef } from "react";
 import {
   Pencil,
   Move,
@@ -27,6 +25,7 @@ interface ToolBarProps {
   setActiveTool: (tool: ShapeType) => void;
   onShare?: () => void;
   clearCanvas: () => void;
+  onImageUpload: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const ToolBar: React.FC<ToolBarProps> = ({
@@ -34,7 +33,11 @@ const ToolBar: React.FC<ToolBarProps> = ({
   setActiveTool,
   onShare,
   clearCanvas,
+  onImageUpload,
 }) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+
   // Hardcoded online users for demo
   const onlineUsers = [
     { id: 1, name: "John D.", image: "https://github.com/shadcn.png" },
@@ -43,9 +46,15 @@ const ToolBar: React.FC<ToolBarProps> = ({
     { id: 4, name: "Lisa K.", image: "https://github.com/shadcn.png" },
     { id: 5, name: "Tom W.", image: "https://github.com/shadcn.png" },
   ];
-  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+
   const displayedUsers = onlineUsers.slice(0, 3);
   const remainingUsers = onlineUsers.length - 3;
+
+  const handleImageClick = () => {
+    setActiveTool("image");
+    fileInputRef.current?.click();
+  };
+
 
   return (
     <div className="w-full flex items-center justify-between px-4 py-2 bg-neutral-500 opacity-80 text-white">
@@ -72,7 +81,6 @@ const ToolBar: React.FC<ToolBarProps> = ({
             variant={activeTool === "hand" ? "secondary" : "ghost"}
             size="icon"
             className="h-8 w-8"
-            // onClick={() => setActiveTool("hand")}
           >
             <Hand className="h-4 w-4" />
           </Button>
@@ -144,10 +152,17 @@ const ToolBar: React.FC<ToolBarProps> = ({
             variant={activeTool === "image" ? "secondary" : "ghost"}
             size="icon"
             className="h-8 w-8"
-            onClick={() => setActiveTool("image")}
+            onClick={handleImageClick}
           >
             <ImageIcon className="h-4 w-4" />
           </Button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={onImageUpload}
+            className="hidden"
+          />
           <Button variant="destructive" size="icon" onClick={clearCanvas}>
             <CopyX className="h-4 w-4" />
           </Button>

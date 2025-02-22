@@ -229,3 +229,64 @@ export class Pencil {
     this.pencilElement = myPath;
   }
 }
+
+export class CanvasText {
+  x: number;
+  y: number;
+  content: string;
+  fontSize: number;
+  fontFamily: string;
+  color: string;
+
+  constructor(
+    x: number,
+    y: number,
+    content = "Text",
+    fontSize = 20,
+    fontFamily = "Arial",
+    color = "black"
+  ) {
+    this.x = x;
+    this.y = y;
+    this.content = content;
+    this.fontSize = fontSize;
+    this.fontFamily = fontFamily;
+    this.color = color;
+  }
+
+  draw(ctx: CanvasRenderingContext2D) {
+    ctx.font = `${this.fontSize}px ${this.fontFamily}`;
+    ctx.fillStyle = this.color;
+    ctx.fillText(this.content, this.x, this.y);
+  }
+
+  updateText(newText: string) {
+    this.content = newText;
+  }
+}
+
+export class Image {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  image: HTMLImageElement;
+
+  constructor(
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    image: HTMLImageElement
+  ) {
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+    this.image = image;
+  }
+
+  draw(ctx: CanvasRenderingContext2D) {
+    ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+  }
+}
